@@ -5,7 +5,7 @@ void    errors(int errno)
     if (errno <= 0)
     {
         perror("Произошла ошибка ");
-        strerror(errno);
+        strerror(errno);    
         if (errno == -2)
             write(2, "Memory allocation error!\n", 25);
         if (errno == -1)
@@ -189,6 +189,7 @@ t_map *all_init(char **av)
     game->player_pos_x = 0;
     game->player_pos_y = 0;
     game->steps = 0;
+    game->counter_player = 0;
     map = open_file(av[1]);
     create_matrix(game, &map);
     return (game);
@@ -243,11 +244,49 @@ void    check_rectangle(t_map *game)
         free_matrix(game, -1, game->map_data, NULL);
     if (!check_border((game->map_data)[j - 1], 0))
             free_matrix(game, -1, game->map_data, NULL);
+    game->map_height = j;
+    game->map_weight = count;
 }
 
-void    main_validation(t_map *game)
+void    set_pole(char c, t_map *game, int i, int j)
 {
-    check_rectangle(game);
+    if (c == 'P')
+    {
+        game->player_pos_x = i;
+        game->player_pos_y = j;
+        game->counter_player++;
+    }
+    if (c == 'C')
+        game->max_score++;
+    if (c == 'E')
+        game->game_over++;
+}
+
+void    check_game_rules(t_map *game)
+{
+    int i;
+    int j;
+
+    i = 0;
+    j = 0;
+    while ((game->map_data)[j] != NULL)
+    {
+        while ((game->map_data)[j][i])
+        {
+            set_pole((game->map_data)[j][i], game, i, j);
+            i++;
+        }
+        i = 0;
+        j++;
+    }
+    if (game->game_over == 0 || game->counter_player != 1 || game->max_score == 0)
+        free_matrix(game, -1, game->map_data, NULL);
+}
+
+void    main_validation(t_map **game)
+{
+    check_rectangle(*game);
+    check_game_rules(*game);
 }
 
 int main(int ag, char **av)
@@ -260,7 +299,7 @@ int main(int ag, char **av)
         if (check_file(av[1]))
         {
             game = all_init(av);
-            main_validation(game);
+            main_validation(&game);
             while ((game)->map_data[i])
                 printf ("%s\n", (game)->map_data[i++]);
             free_matrix(game, 1, game->map_data, NULL);
@@ -270,3 +309,7 @@ int main(int ag, char **av)
     }
     return (0);
 }
+
+
+
+// printf ("p_count = %d e = %d p_x = %d p_y = %d count_c = %d\n", (*game)->counter_player, (*game)->game_over, (*game)->player_pos_x, (*game)->player_pos_y, (*game)->max_score);

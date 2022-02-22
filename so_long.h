@@ -17,6 +17,7 @@ typedef struct s_basic
     int     max_score;
     int     game_over;
     int     steps;
+    int     counter_player;
     void    *end_img;
     void    *wall;
     void    *exit;
