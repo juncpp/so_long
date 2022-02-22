@@ -2,7 +2,7 @@
 
 int	check_valid(char c)
 {
-	if (c == '1'|| c == '0' || c == '\n' || c == 'E' || c == 'P' || c == 'C')
+	if (c == '1' || c == '0' || c == '\n' || c == 'E' || c == 'P' || c == 'C')
 		return (1);
 	return (0);
 }
@@ -34,19 +34,19 @@ char	*ft_strjoin(char *str, char c)
 
 int	get_next_line(char **inp, int fd)
 {
-    int     flag;
-    char    c;
+	int		flag;
+	char	c;
 
 	*inp = (char *)malloc(1);
 	if (!*inp)
 		free_map(-2, *inp);
 	(*inp)[0] = '\0';
-    while (1)
-    {
-        flag = read(fd, &c, 1);
-        if (flag <= 0)
-            break;
-        *inp = ft_strjoin(*inp, c);
-    }
+	while (1)
+	{
+		flag = read(fd, &c, 1);
+		if (flag <= 0)
+			break ;
+		*inp = ft_strjoin(*inp, c);
+	}
 	return (flag);
 }
