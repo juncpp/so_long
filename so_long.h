@@ -41,7 +41,7 @@ typedef struct s_basic
 // }   t_valid;
 
 void	pixels_init(t_map *game, t_render *libx);
-void	set_pixel(t_map *game, t_render *libx);
+void	set_pixel(t_map *game, t_render *libx, int i, int j);
 int		init_window(t_map *game, t_render *libx);
 void	errors(int errno);
 int		get_next_line(char **inp, int fd);

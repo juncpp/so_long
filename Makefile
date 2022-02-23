@@ -12,10 +12,12 @@ CFLAGS = -Wall -Wextra -Werror
 
 RM = rm -f
 
+FSA = -fsanitize=address
+
 all:	$(NAME)
 
-$(NAME): $(OBJ) map.ber $(HDR)
-	$(CC) -fsanitize=address $(OBJ) -lmlx -framework OpenGL -framework AppKit -o $(NAME)
+$(NAME): $(OBJ) $(HDR)
+	$(CC) $(FSA) $(OBJ) -lmlx -framework OpenGL -framework AppKit -o $(NAME)
 %.o:	%.c
 	$(CC) $(CFLAGS) -Imlx -c $< -o $@
 
