@@ -1,6 +1,7 @@
 NAME = so_long
 
-SRC = main.c get_next_line.c
+SRC = main.c get_next_line.c so_long_init_and_create.c so_long_main_validation.c so_long_memory_map.c \
+		so_long_move_and_close.c so_long_last_count_move.c
 
 OBJ = $(SRC:.c=.o)
 
