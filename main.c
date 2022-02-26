@@ -57,10 +57,10 @@ void	main_game_relize(t_map **game)
 	(*game)->libx->mlx = mlx_init();
 	(*game)->libx->win = mlx_new_window((*game)->libx->mlx, (*game)->map_width, \
 		(*game)->map_height, "LETS GO!");
-	ft_itoa((*game)->steps, *game);
 	mlx_hook((*game)->libx->win, 2, 0, &move_game, *game);
 	mlx_hook((*game)->libx->win, 17, 0, &fast_close, *game);
 	pixels_init(*game, (*game)->libx);
+	ft_itoa((*game)->steps, *game);
 	mlx_loop((*game)->libx->mlx);
 }
 
