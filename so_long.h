@@ -4,7 +4,7 @@
 # include <mlx.h>
 # include <unistd.h>
 # include <fcntl.h>
-# include <string.h>
+# include <stdio.h>
 # include <stdlib.h>
 
 typedef struct s_render
@@ -33,6 +33,7 @@ typedef struct s_basic
 	t_render			*libx;
 }	t_map;
 
+void	main_game_relize(t_map **game);
 int		last_img(t_map *game, int i, int j);
 int		move_all(t_map *game, int x, int y);
 void	set_pixel(t_map *game, t_render *libx, int i, int j);

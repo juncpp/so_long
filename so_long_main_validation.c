@@ -92,7 +92,5 @@ void	check_game_rules(t_map *game)
 void	main_validation(t_map **game)
 {
 	check_rectangle(*game);
-	// if ((*game)->map_width >= 2560 || (*game)->map_height >= 1312)
-	// 	free_matrix(*game, -1, (*game)->map_data, NULL);
 	check_game_rules(*game);
 }
