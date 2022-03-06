@@ -40,6 +40,16 @@ int	ft_itoa(unsigned int n, t_map *game)
 	return (0);
 }
 
+void	check_final_img(t_map *game, int i, int j)
+{
+	if (!game->game_over)
+		mlx_string_put(game->libx->mlx, game->libx->win, i, j, \
+			0xffff00, "WINNER");
+	else
+		mlx_string_put(game->libx->mlx, game->libx->win, i, j, \
+			0xff0000, "GAME_OVER");
+}
+
 int	last_img(t_map *game, int i, int j)
 {
 	while ((game->map_data)[j])
@@ -59,8 +69,8 @@ int	last_img(t_map *game, int i, int j)
 	i = ((game->map_width / 64) * 26);
 	mlx_put_image_to_window(game->libx->mlx, game->libx->win, \
 		game->end_img, (game->map_width / 4), j);
-	mlx_string_put(game->libx->mlx, game->libx->win, i, j, 0xffff00, "WINNER");
 	ft_itoa(game->steps++, game);
+	check_final_img(game, i, j);
 	mlx_hook(game->libx->win, 17, 0, &fast_close, game);
 	mlx_hook(game->libx->win, 2, 0, &close_esc, game);
 	mlx_loop(game->libx->mlx);

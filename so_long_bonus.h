@@ -12,11 +12,23 @@ typedef struct s_render
 	void	*win;
 }	t_render;
 
+typedef struct s_enemy
+{
+	int	flag;
+	int	pos_x;
+	int	pos_y;
+	int	up;
+	int	down;
+	int	right;
+	int	left;
+}	t_enemy;
+
 typedef struct s_bonus
 {
-	int		pos;
+	int		anim;
 	int		k_enemy;
 	void	*enemy;
+	t_enemy	*enemy_arr;
 }	t_bonus;
 
 typedef struct s_basic
@@ -42,7 +54,7 @@ typedef struct s_basic
 
 void	main_game_relize(t_map **game);
 int		last_img(t_map *game, int i, int j);
-int		move_all(t_map *game, int x, int y);
+int		move_all_bonus(t_map *game, int x, int y);
 void	set_pixel(t_map *game, t_render *libx, int i, int j);
 int		close_esc(int keycode, t_map *game);
 int		fast_close(t_map *game);
