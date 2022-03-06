@@ -39,7 +39,8 @@ int	last_pos(t_map *game, int i, int j)
 		{
 			if ((game->map_data)[j][i] == '0')
 			{
-				if (game->game_b->enemy_arr[0].pos_x != i && game->game_b->enemy_arr[0].pos_y != j)
+				if (game->game_b->enemy_arr[0].pos_x != i || \
+						game->game_b->enemy_arr[0].pos_y != j)
 				{
 					game->game_b->k_enemy++;
 					game->game_b->enemy_arr[1].flag = 1;
@@ -141,45 +142,51 @@ void	mini_init(t_bonus *game_b)
 	game_b->k_enemy = 0;
 }
 
-int	check_game_over(t_map *game, int x, int y)
+int	check_game_over(t_map *game, int x, int y, char c)
 {
-	if (game->game_b->enemy_arr[0].right == 1)
+	if (c != '1' && c != 'E')
 	{
-		if (game->map_data[y][x + 1] == 'P' || game->map_data[y][x] == 'P')
+		if (game->game_b->enemy_arr[0].right == 1)
 		{
-			game->game_over = -1;
-			return (0);
+			if (game->map_data[y][x + 1] == 'P' || game->map_data[y][x] == 'P')
+				game->game_over = -1;
 		}
+		else
+		{
+			if (game->map_data[y][x - 1] == 'P' || game->map_data[y][x] == 'P')
+				game->game_over = -1;
+		}
+		if (game->game_over == -1)
+			return (0);
 	}
 	else
-	{
-		if (game->map_data[y][x - 1] == 'P' || game->map_data[y][x] == 'P')
-		{
-			game->game_over = -1;
-			return (0);
-		}
-	}
+		return (0);
 	return (1);
 }
 
-int	check_game_over2(t_map *game, int x, int y)
+int	check_game_over2(t_map *game, int x, int y, char c)
 {
-	if (game->game_b->enemy_arr[1].down == 1)
+	if (c != '1' && c != 'E')
 	{
-		if (game->map_data[y + 1][x] == 'P' || game->map_data[y][x] == 'P')
+		if (game->game_b->enemy_arr[1].down == 1)
 		{
-			game->game_over = -1;
-			return (0);
+			if (game->map_data[y + 1][x] == 'P' || game->map_data[y][x] == 'P')
+			{
+				game->game_over = -1;
+				return (0);
+			}
+		}
+		else
+		{
+			if (game->map_data[y - 1][x] == 'P' || game->map_data[y][x] == 'P')
+			{
+				game->game_over = -1;
+				return (0);
+			}
 		}
 	}
 	else
-	{
-		if (game->map_data[y - 1][x] == 'P' || game->map_data[y][x] == 'P')
-		{
-			game->game_over = -1;
-			return (0);
-		}
-	}
+		return (0);
 	return (1);
 }
 
@@ -188,43 +195,48 @@ void	move_second_enemy(t_map *game, t_enemy *enemy_arr, int x, int y)
 	if (enemy_arr[1].down == 1)
 	{
 		enemy_arr[1].up = 0;
-		if (game->map_data[y + 1][x] != '1' && check_game_over2(game, x, y))
+		if (check_game_over2(game, x, y, game->map_data[y + 1][x]))
 			enemy_arr[1].pos_y = y + 1;
-		else if (game->map_data[y + 1][x] == '1')
+		else if (game->map_data[y + 1][x] == '1' || \
+					game->map_data[y + 1][x] == 'E')
 			enemy_arr[1].up = 1;
 	}
 	if (enemy_arr[1].up == 1)
 	{
 		enemy_arr[1].down = 0;
-		if (game->map_data[y - 1][x] != '1' && check_game_over2(game, x, y))
+		if (check_game_over2(game, x, y, game->map_data[y - 1][x]))
 			enemy_arr[1].pos_y = y - 1;
-		else if (game->map_data[y - 1][x] == '1')
+		else if (game->map_data[y - 1][x] == '1' || \
+					game->map_data[y + 1][x] == 'E')
 		{
 			enemy_arr[1].down = 1;
-			if (game->map_data[y + 1][x] != '1' && check_game_over2(game, x, y))
+			if (check_game_over2(game, x, y, game->map_data[y + 1][x]))
 				enemy_arr[1].pos_y = y + 1;
 		}
 	}
 }
+
 void	move_first_enemy(t_map *game, t_enemy *enemy_arr, int x, int y)
 {
 	if (enemy_arr[0].right == 1)
 	{
 		enemy_arr[0].left = 0;
-		if (game->map_data[y][x + 1] != '1' && check_game_over(game, x, y))
+		if (check_game_over(game, x, y, game->map_data[y][x + 1]))
 			enemy_arr[0].pos_x = x + 1;
-		else if (game->map_data[y][x + 1] == '1')
+		else if (game->map_data[y][x + 1] == '1' || \
+					game->map_data[y][x + 1] == 'E')
 			enemy_arr[0].left = 1;
 	}
 	if (enemy_arr[0].left == 1)
 	{
 		enemy_arr[0].right = 0;
-		if (game->map_data[y][x - 1] != '1' && check_game_over(game, x, y))
+		if (check_game_over(game, x, y, game->map_data[y][x - 1]))
 			enemy_arr[0].pos_x = x - 1;
-		else if (game->map_data[y][x - 1] == '1')
+		else if (game->map_data[y][x - 1] == '1' || \
+					game->map_data[y][x + 1] == 'E')
 		{
 			enemy_arr[0].right = 1;
-			if (game->map_data[y][x + 1] != '1' && check_game_over(game, x, y))
+			if (check_game_over(game, x, y, game->map_data[y][x + 1]))
 				enemy_arr[0].pos_x = x + 1;
 		}
 	}
@@ -266,7 +278,7 @@ int	move_all_bonus(t_map *game, int x, int y)
 		else if ((game->map_data)[j + y][i + x] == 'E')
 		{
 			if (!game->max_score)
-				game->game_over = 0;
+				return (--game->game_over);
 			else
 				return (0);
 		}
