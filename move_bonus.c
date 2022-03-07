@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   move_bonus.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mmeredit <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/03/07 18:10:25 by mmeredit          #+#    #+#             */
+/*   Updated: 2022/03/07 18:10:27 by mmeredit         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "so_long_bonus.h"
 
 void	ft_sort(char *str, int count)
@@ -50,6 +62,34 @@ void	check_final_img(t_map *game, int i, int j)
 			0xff0000, "GAME_OVER");
 }
 
+void	check_image(t_render *libx, t_map *game, int i, int j)
+{
+	int	x1;
+	int	y1;
+	int	x2;
+	int	y2;
+
+	x1 = game->game_b->enemy_arr[0].pos_x;
+	y1 = game->game_b->enemy_arr[0].pos_y;
+	x2 = game->game_b->enemy_arr[1].pos_x;
+	y2 = game->game_b->enemy_arr[1].pos_y;
+	if ((game->map_data)[j][i] != '1')
+		mlx_put_image_to_window(libx->mlx, libx->win, game->floor, \
+			i * 32, j * 32);
+	else
+		mlx_put_image_to_window(libx->mlx, libx->win, game->wall, \
+			i * 32, j * 32);
+	if ((game->map_data)[j][i] == 'C')
+		mlx_put_image_to_window(libx->mlx, libx->win, game->items, \
+			i * 32, j * 32);
+	if ((game->map_data)[j][i] == 'E')
+		mlx_put_image_to_window(libx->mlx, libx->win, game->exit, \
+			i * 32, j * 32);
+	if ((i == x1 && j == y1) || (i == x2 && j == y2))
+		mlx_put_image_to_window(libx->mlx, libx->win, game->game_b->enemy, \
+			i * 32, j * 32);
+}
+
 int	last_img(t_map *game, int i, int j)
 {
 	while ((game->map_data)[j])
@@ -69,10 +109,10 @@ int	last_img(t_map *game, int i, int j)
 	i = ((game->map_width / 64) * 26);
 	mlx_put_image_to_window(game->libx->mlx, game->libx->win, \
 		game->end_img, (game->map_width / 4), j);
-	ft_itoa(game->steps++, game);
 	check_final_img(game, i, j);
-	mlx_hook(game->libx->win, 17, 0, &fast_close, game);
-	mlx_hook(game->libx->win, 2, 0, &close_esc, game);
+	ft_itoa(++game->steps, game);
+	mlx_hook(game->libx->win, 17, 0, &fast_close_bonus, game);
+	mlx_hook(game->libx->win, 2, 0, &close_esc_bonus, game);
 	mlx_loop(game->libx->mlx);
 	return (0);
 }
